@@ -30,6 +30,10 @@ class Runner
       new_line :step, description, ->{ yield }
     end
 
+    def check
+      yield
+    end
+
     def run(regex)
       @regex = /#{regex}/ if regex
 

@@ -7,17 +7,22 @@ class Minirun < Runner
     description "Use CloudFormation. There is a Rowlf CF template in the [lonelyplanet/cloudformation](https://github.com/lonelyplanet/cloudformation/blob/master/output/rowlf.json)"
 
     step "Go to the CloudFormation console on AWS" do
-      false
+      check do
+        false
+      end
     end
 
     step "Click \"Create Stack\"" do
-      true
+      check do
+        true
+      end
     end
 
     task "Subtask" do
 
       step "Another step" do
         puts "Another step from subtask!"
+        check { true }
       end
 
     end
