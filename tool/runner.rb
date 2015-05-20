@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
-require 'ostruct'
 require 'colorize'
+require 'ostruct'
 
 class Runner
 
@@ -29,7 +29,7 @@ class Runner
       new_line :step, description, ->{ yield }
     end
 
-    def run
+    def run(regexp)
       walk ->(line){
         puts decorate(line, :run)
         line.code.call if line.type == :step
@@ -73,7 +73,7 @@ class Runner
         when :title then "# #{description}"
         when :task then "## #{description}"
         when :description then "_#{description}_"
-        when :step then description
+        when :step then "- #{description}"
         end
       end
     end
@@ -81,3 +81,31 @@ class Runner
   end
 
 end
+
+require 'require_all'
+require_all 'runners'
+require 'thor'
+
+class RunRunner < Thor
+
+  desc "exec RUNNER", "Run task or all tasks in document"
+
+  def exec(runner, regexp = nil)
+    get_class(runner).run(/#{regexp}/)
+  end
+
+  desc "doc RUNNER", "Generate documentation from file"
+
+  def doc(runner)
+    get_class(runner).doc
+  end
+
+  private
+
+  def get_class(name)
+    Kernel.const_get(name)
+  end
+
+end
+
+RunRunner.start(ARGV)
