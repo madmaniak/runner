@@ -13,7 +13,7 @@ module Runner
     private
 
     def name
-      "rowlf-minirun-#{DateTime.now.strftime("%d-%m-%Y")}"
+      "rowlf-minirun-#{DateTime.now.strftime("%d-%m-%Y")}-#{SecureRandom.hex(8)}"
     end
 
     def parameters
