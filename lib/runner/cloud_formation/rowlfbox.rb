@@ -1,6 +1,6 @@
 module Runner
   module CloudFormation
-    class Rowlfbox
+    class Rowlfbox < Base
       private
 
       def name
