@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'pry'
 require 'colorize'
 require 'ostruct'
 
@@ -29,10 +30,24 @@ class Runner
       new_line :step, description, ->{ yield }
     end
 
-    def run(regexp)
+    def check
+      yield
+    end
+
+    def run(regex)
+      @regex = /#{regex}/ if regex
+
       walk ->(line){
-        puts decorate(line, :run)
-        line.code.call if line.type == :step
+        if @regex
+          if line.description =~ @regex
+            @regex = nil
+          else
+            return
+          end
+        end
+
+        status = line.code.call if line.type == :step
+        puts decorate(line, :run, status)
       }
     end
 
@@ -58,9 +73,10 @@ class Runner
       end
     end
 
-    def decorate(line, mode)
+    def decorate(line, mode, status)
       description = line.description
 
+      render_status(status) +
       if mode == :run
         case line.type
         when :title then description.white.on_blue
@@ -78,6 +94,15 @@ class Runner
       end
     end
 
+    def render_status(status)
+      return "" if status.nil?
+      if status
+        " DONE ".light_green.on_green
+      else
+        " FAIL ".black.on_red
+      end + " "
+    end
+
   end
 
 end
@@ -90,8 +115,8 @@ class RunRunner < Thor
 
   desc "exec RUNNER", "Run task or all tasks in document"
 
-  def exec(runner, regexp = nil)
-    get_class(runner).run(/#{regexp}/)
+  def exec(runner, regex = nil)
+    get_class(runner).run(regex)
   end
 
   desc "doc RUNNER", "Generate documentation from file"
