@@ -1,3 +1,5 @@
+Browser = Watir::Browser.new :firefox
+
 class Minirun < Runner
 
   title "Running a Rowlf Minirun"
