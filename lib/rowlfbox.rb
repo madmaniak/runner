@@ -32,8 +32,12 @@ module Runner
     end
 
     def template
-      raise "No rowlf.json file provided." unless File.exists?(File.absolute_path("templates/rowlf.json"))
-      File.read(File.absolute_path("templates/rowlf.json"))
+      raise "No rowlf.json file provided." unless File.exists?(file)
+      File.read(file)
+    end
+
+    def file
+      File.absolute_path("templates/rowlf.json")
     end
   end
 end
