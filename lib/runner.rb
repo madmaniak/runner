@@ -1,8 +1,11 @@
 require 'aws-sdk'
+require 'net/ssh'
+require 'pry'
 
 require_relative 'runner/cloud_formation/base'
 require_relative 'runner/cloud_formation/rowlfbox'
 require_relative 'runner/cloud_formation/es_cluster'
+require_relative 'runner/ssh'
 
 AWS.config(
   access_key_id:     ENV['AWS_ACCESS_KEY_ID'], 
