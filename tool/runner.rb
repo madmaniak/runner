@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'pry'
 require 'colorize'
 require 'ostruct'
+require 'watir-webdriver'
 
 class Runner
 
@@ -31,7 +32,9 @@ class Runner
     end
 
     def check
-      yield
+      status = yield
+      print render_status(status)
+      throw "Check failed" unless status
     end
 
     def run(regex)
@@ -46,8 +49,15 @@ class Runner
           end
         end
 
-        status = line.code.call if line.type == :step
-        puts decorate(line, :run, status)
+        begin
+          line.code.call if line.type == :step
+        rescue => e
+          puts decorate(line, :run)
+          puts e.message
+          binding.pry
+        ensure
+          puts decorate(line, :run)
+        end
       }
     end
 
@@ -73,10 +83,9 @@ class Runner
       end
     end
 
-    def decorate(line, mode, status)
+    def decorate(line, mode)
       description = line.description
 
-      render_status(status) +
       if mode == :run
         case line.type
         when :title then description.white.on_blue
@@ -95,7 +104,6 @@ class Runner
     end
 
     def render_status(status)
-      return "" if status.nil?
       if status
         " DONE ".light_green.on_green
       else
