@@ -16,7 +16,7 @@ module Runner
           "AppName"         => name,
           "AppRubyVersion"  => "2.1",
           "AppSubnet"       => "subnet-85bb9ee8",
-          "ChefVersion"     =>  "11.28.8",
+          "ChefVersion"     =>  "11.12.8",
           "EnvironmentName" =>  "rowlf",
           "RowlfExtraEnv"   => "default"
         }
