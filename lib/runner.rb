@@ -5,6 +5,7 @@ require 'pry'
 require_relative 'runner/cloud_formation/base'
 require_relative 'runner/cloud_formation/rowlfbox'
 require_relative 'runner/cloud_formation/es_cluster'
+require_relative 'runner/route53/es_cluster'
 require_relative 'runner/ssh'
 
 AWS.config(
