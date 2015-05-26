@@ -1,6 +1,7 @@
 require 'aws-sdk'
 require 'net/ssh'
 require 'pry'
+require 'typhoeus'
 
 require_relative 'runner/cloud_formation/base'
 require_relative 'runner/cloud_formation/rowlfbox'

@@ -10,6 +10,25 @@ module Runner
         record.resource_records = resource_records
       end
 
+      def set_index_writable
+        req = Typhoeus::Request.new(
+          url,
+          method: :put,
+          body: { "index" => { "blocks" => { "read_only" => false } } }
+        )
+        req.run
+      end
+
+      def set_number_of_replicas
+        req = Typhoeus::Request.new(
+          url,
+          method: :put,
+          body: { "index" => { "number_of_replicas" => 2 } }
+        )
+        res = req.run
+        raise "Number of replicas couldn't be set." unless res.success?
+      end
+
       private
 
       def record
@@ -17,11 +36,15 @@ module Runner
       end
 
       def hosted_zone
-        @hosted_zone ||= r53.hosted_zones.find { |zone| zone.name == "lonelyplanet.com." }
+        @hosted_zone ||= @r53.hosted_zones.find { |zone| zone.name == "lonelyplanet.com." }
       end
 
       def resource_records
         [ { value: @cluster_name } ]
+      end
+
+      def url
+        "index-minirun.elasticsearch.lonelyplanet.com:9200/_settings"
       end
     end
   end
