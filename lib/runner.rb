@@ -7,7 +7,8 @@ require_relative 'runner/cloud_formation/base'
 require_relative 'runner/cloud_formation/rowlfbox'
 require_relative 'runner/cloud_formation/es_cluster'
 require_relative 'runner/route53/es_cluster'
-require_relative 'runner/ssh'
+require_relative 'runner/ssh/rowlfbox'
+require_relative 'runner/ssh/es_cluster'
 
 AWS.config(
   access_key_id:     ENV['AWS_ACCESS_KEY_ID'], 
