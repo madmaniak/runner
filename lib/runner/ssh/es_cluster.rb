@@ -1,11 +1,6 @@
 module Runner
   module SSH
-    class EsCluster
-      def initialize(host, user)
-        @ssh = Net::SSH.start(host, user)
-        @s3  = AWS::S3.new
-      end
-
+    class EsCluster < Base
       def restore_es_index_from_backup
         download_backup
         unzip_and_copy_backup
@@ -29,7 +24,10 @@ module Runner
       end
 
       def key
-        @key ||= @s3.buckets["elasticsearch.current.backup"].objects.max_by { |o| o.last_modified }.key
+        @key ||= begin 
+          s3 = AWS::S3.new
+          s3.buckets["elasticsearch.current.backup"].objects.max_by { |o| o.last_modified }.key
+        end
       end
 
       def timestamp
