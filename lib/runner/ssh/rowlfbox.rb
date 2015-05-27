@@ -1,10 +1,6 @@
 module Runner
   module SSH
-    class Rowlfbox
-      def initialize(host, user)
-        @ssh = Net::SSH.start(host, user)
-      end
-
+    class Rowlfbox < Base
       def create_tmux_session
         @ssh.exec!("sudo -u deploy tmux new -s $USER-rowlf-run-$(date '+%y%m%d')")
       end
