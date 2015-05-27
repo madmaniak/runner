@@ -19,6 +19,7 @@ module Runner
         @ssh.exec!("cp /tmp/es-cluster-#{timestamp}.tar.gz /mnt")
         @ssh.exec!("tar -zxvf es-cluster-#{timestamp}.tar.gz")
         @ssh.exec!("mv es-cluster-#{timestamp} es-cluster-#{DateTime.now.strftime("%d-%m-%Y")}")
+        @ssh.exec!("exit")
         @ssh.exec!("sudo service elasticsearch start && tail -f /var/log/elasticsearch/*.log | grep indices")
       end
 
